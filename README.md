@@ -38,18 +38,18 @@ O endereço padrão deste repositório é `https://alexmetaloide.github.io/cutli
 - Projetos salvos no navegador e importação/exportação de JSON.
 - Importação de peças e chapas por CSV ou texto colado; exportação CSV das peças.
 - Exportação SVG e PNG da chapa selecionada; impressão de todas as chapas e da lista de cortes. Para PDF, escolha **Salvar como PDF** na impressão do navegador.
-- Milímetros, centímetros e polegadas, com conversão das dimensões existentes.
+- Todas as medidas lineares em centímetros e áreas em cm², com conversão automática dos projetos antigos em milímetros ou polegadas.
 - Layout responsivo para desktop e celular, sem serviços externos em tempo de execução.
 
 ## CSV
 
 ```csv
 comprimento;largura;quantidade;nome;material
-720;450;2;Lateral;MDF 18 mm
-564;420;3;Prateleira;MDF 18 mm
+72;45;2;Lateral;MDF 1,8 cm
+56,4;42;3;Prateleira;MDF 1,8 cm
 ```
 
-Aceita ponto e vírgula, vírgula e tabulação; cabeçalhos em português ou inglês; decimais com vírgula quando o separador for ponto e vírgula; campos entre aspas. As dimensões são interpretadas na unidade atual do projeto. As linhas importadas são adicionadas à lista. O nome é ignorado para estoque. Quantidades devem ser inteiros positivos.
+Aceita ponto e vírgula, vírgula e tabulação; cabeçalhos em português ou inglês; decimais com vírgula quando o separador for ponto e vírgula; campos entre aspas. As dimensões do CSV são interpretadas em centímetros. As linhas importadas são adicionadas à lista. O nome é ignorado para estoque. Quantidades devem ser inteiros positivos.
 
 ## Como funciona o motor
 
@@ -61,7 +61,7 @@ O aproveitamento considera a área total das chapas abertas. A área não utiliz
 
 ## Dados e limites de equivalência
 
-Os projetos ficam no `localStorage` do navegador. Não há conta, sincronização em nuvem, assinatura ou cobrança. Exportar JSON permite backup e transferência. A interface e o comportamento principal foram reconstruídos com código próprio; telas comerciais, autenticação e o algoritmo privado do servidor original não foram copiados.
+Os projetos ficam no `localStorage` do navegador. Projetos JSON e rascunhos antigos em milímetros ou polegadas são convertidos automaticamente para centímetros ao abrir, preservando as dimensões físicas. Os valores da serra e do refilo também são convertidos. Não há conta, sincronização em nuvem, assinatura ou cobrança. Exportar JSON permite backup e transferência. A interface e o comportamento principal foram reconstruídos com código próprio; telas comerciais, autenticação e o algoritmo privado do servidor original não foram copiados.
 
 Consulte [a análise da referência](docs/reference-analysis.md) para fontes, cobertura e limitações. A suíte inclui casos aleatórios reprodutíveis, verificação de área e reprodução física da sequência de cortes.
 
