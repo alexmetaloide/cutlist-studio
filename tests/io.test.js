@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {parseCSV,exportCSV,normalizeProject,example,convertUnit} from '../src/io.js';
+test('CSV suporta português, decimal com vírgula, aspas e separador ponto e vírgula',()=>{const r=parseCSV('comprimento;largura;qtd;nome;material\n720,5;450;2;"Porta; A";MDF');assert.equal(r[0].length,720.5);assert.equal(r[0].label,'Porta; A');assert.equal(r[0].quantity,2);});
+test('CSV suporta vírgula, tab, sem cabeçalho e aspas escapadas',()=>{assert.equal(parseCSV('100,50,2,"A ""B""",MDF')[0].label,'A "B"');assert.equal(parseCSV('length\twidth\tqty\n100\t50\t3')[0].quantity,3);});
+test('CSV rejeita dimensões e quantidade inválidas e aspas incompletas',()=>{for(const text of ['100;0;1','100;50;1.2','100;50;-1','Infinity;50;1','100;50;1;"erro'])assert.throws(()=>parseCSV(text));});
+test('exportação CSV preserva acentos e escapa conteúdo de planilha',()=>{const rows=parseCSV(exportCSV([{length:100,width:50,quantity:2,label:'Porta "A"',material:'Carvalho'}]));assert.equal(rows[0].label,'Porta "A"');assert.ok(exportCSV([{label:'=1+2'}]).includes("'=1+2"));});
+test('projeto JSON é validado, evita opções arbitrárias e mantém dados',()=>{const p=example();const n=normalizeProject(JSON.parse(JSON.stringify(p)));assert.equal(n.panels.length,5);assert.equal(n.stock[0].length,2750);assert.throws(()=>normalizeProject({panels:[{length:-1,width:50}],stock:[]}));});
+test('troca de unidade converte medidas de peças, chapas, serra e refilo',()=>{const p=example();convertUnit(p,'cm');assert.equal(p.stock[0].length,275);assert.equal(p.options.kerf,.3);convertUnit(p,'mm');assert.equal(p.panels[0].length,720);assert.equal(p.options.kerf,3);});

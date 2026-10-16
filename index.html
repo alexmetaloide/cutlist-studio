@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#273438">
+  <meta name="description" content="Otimize o corte de MDF, madeira, vidro e outras chapas. Planeje peças, aproveite materiais e exporte seus planos de corte.">
+  <title>CutList Studio — Plano de corte</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="CutList Studio, início"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><strong>CutList<span> Studio</span></strong><small>PLANO DE CORTE</small></a>
+    <div class="top-actions"><button class="primary" id="calculate"><span class="play">▶</span> Calcular</button><button id="save-project" class="header-button"><span>▣</span> <span class="button-label">Salvar</span></button><button id="open-projects" class="header-button" aria-label="Abrir projetos" title="Abrir projetos">▱</button><button id="settings" class="header-button" aria-label="Definições" title="Definições">⚙</button><button id="more" class="header-button" aria-label="Mais ações" aria-expanded="false">⋮</button></div>
+    <div class="dropdown hidden" id="main-menu"><button data-action="new">Novo projeto</button><button data-action="example">Carregar exemplo</button><hr><button data-action="import-json">Importar projeto JSON</button><button data-action="export-json">Exportar projeto JSON</button><button data-action="export-csv">Exportar peças CSV</button><hr><button data-action="about">Sobre o projeto</button></div>
+  </header>
+  <main class="app-layout">
+    <aside class="sidebar" aria-label="Dados do plano de corte">
+      <div class="project-heading"><div><span class="eyebrow">SEU PROJETO</span><input id="project-name" aria-label="Nome do projeto" maxlength="100" value="Novo projeto"></div><span id="save-status" class="save-status">Local</span></div>
+      <section class="input-section"><div class="section-title"><h2><span class="section-icon">▥</span> Painéis <span class="count" id="panel-count">0</span></h2><button class="icon-button" data-csv="panels" title="Importar CSV de peças" aria-label="Importar CSV de peças">↥</button></div><div class="table-scroll"><table class="input-table" id="panels-table"><thead></thead><tbody></tbody></table></div><button class="add-row" data-add="panels">＋ Adicionar painel</button></section>
+      <section class="input-section"><div class="section-title"><h2><span class="section-icon">▱</span> Estoque <span class="count" id="stock-count">0</span></h2><button class="icon-button" data-csv="stock" title="Importar CSV de chapas" aria-label="Importar CSV de chapas">↥</button></div><div class="table-scroll"><table class="input-table" id="stock-table"><thead></thead><tbody></tbody></table></div><button class="add-row" data-add="stock">＋ Adicionar chapa</button></section>
+      <section class="input-section options-section"><div class="section-title"><h2><span class="section-icon">⚙</span> Opções de corte</h2><span class="unit-badge" id="unit-badge">mm</span></div><div class="options-content">
+        <label class="option-line">Espessura da serra <div class="number-unit"><input type="number" id="kerf" min="0" step="any" value="3" aria-label="Espessura da serra"><span class="unit-text">mm</span></div></label>
+        <label class="option-line">Refilo nas bordas <div class="number-unit"><input type="number" id="trim" min="0" step="any" value="0" aria-label="Refilo nas bordas"><span class="unit-text">mm</span></div></label>
+        <label class="option-line">Nomes nos painéis <input class="switch" type="checkbox" id="showLabels" checked></label>
+        <label class="option-line">Permitir rotação das peças <input class="switch" type="checkbox" id="allowRotation" checked></label>
+        <label class="option-line">Considerar materiais <input class="switch" type="checkbox" id="considerMaterials" checked></label>
+        <label class="option-line">Respeitar direção do veio <input class="switch" type="checkbox" id="grain"></label>
+        <label class="option-line">Usar somente uma chapa <input class="switch" type="checkbox" id="oneSheet"></label>
+        <label class="option-line">Fitas de borda <input class="switch" type="checkbox" id="edgeBanding"></label>
+        <label class="stack-label">Prioridade da otimização<select id="priority"><option value="area">Melhor aproveitamento</option><option value="cuts">Menos cortes</option></select></label>
+      </div></section>
+      <div class="sidebar-footer"><span class="status-dot"></span> Cálculo local · Seus dados ficam neste navegador</div>
+    </aside>
+    <section class="workspace" aria-label="Resultado do plano de corte">
+      <div class="workspace-toolbar"><div class="view-tabs"><button class="view-tab active" data-view="diagram">▦ <span>Plano de corte</span></button><button class="view-tab" data-view="cuts">☷ <span>Lista de cortes</span></button></div><div class="export-actions"><button id="export-svg" title="Exportar SVG" disabled>SVG</button><button id="export-png" title="Exportar imagem PNG" disabled>PNG</button><button id="print" title="Imprimir ou salvar PDF" disabled>▤ <span>PDF / Imprimir</span></button></div></div>
+      <div id="result-banner" class="result-banner hidden" role="status"></div>
+      <div class="empty-state" id="empty-state"><div class="empty-art"><div class="art-board"><div>A</div><div>B</div><div>C</div><div>D</div><div class="art-waste"></div></div><span class="art-measure">↔</span></div><span class="eyebrow">CADA CORTE CONTA</span><h1>Mais peças. Menos desperdício.</h1><p>Adicione seus painéis e as chapas disponíveis.<br>O melhor encaixe começa por aqui.</p><button class="primary" id="load-example">Experimentar com um exemplo <span>↗</span></button><div class="empty-hint"><span>01 Adicione as peças</span><b>→</b><span>02 Informe o estoque</span><b>→</b><span>03 Calcule</span></div></div>
+      <div class="result-layout hidden" id="result-layout"><div class="diagram-area"><div class="sheet-toolbar"><div><span class="eyebrow">CHAPAS UTILIZADAS</span><h1 id="result-title">Seu plano de corte</h1></div><div class="diagram-controls"><button id="zoom-out" aria-label="Diminuir zoom">−</button><span id="zoom-value">100%</span><button id="zoom-in" aria-label="Aumentar zoom">＋</button></div></div><div id="sheet-tabs" class="sheet-tabs"></div><div id="diagram-view"><div class="sheet-canvas" id="sheet-canvas"></div><div class="legend"><span><i class="legend-piece"></i> Painéis</span><span><i class="legend-waste"></i> Sobra</span><span><i class="legend-cut"></i> Corte da serra</span><span id="sheet-dimensions"></span></div><div id="piece-details" class="piece-details">Selecione uma peça para ver os detalhes.</div></div><div id="cuts-view" class="hidden"><p class="muted">Sequência de cortes guilhotinados da chapa selecionada. Coordenadas a partir do canto superior esquerdo.</p><div class="cuts-scroll"><table class="data-table"><thead><tr><th>#</th><th>Direção</th><th>De (X, Y)</th><th>Até (X, Y)</th><th>Comprimento</th></tr></thead><tbody id="cuts-body"></tbody></table></div></div></div>
+      <aside class="stats-panel" aria-label="Estatísticas"><div class="stats-title"><h2>Estatísticas</h2><span>↗</span></div><div class="utilization"><div class="donut" id="utilization-ring"><div><strong id="utilization">0%</strong><span>aproveitamento</span></div></div></div><div id="stats-list" class="stats-list"></div><div class="sheet-stats"><h3>Esta chapa</h3><div id="sheet-stats"></div></div><div id="unplaced" class="unplaced hidden"></div><div class="stats-note"><span>◉</span> Encaixe por cortes guilhotinados.<br>Revise as medidas antes de cortar.</div></aside></div>
+      <footer class="workspace-footer"><span>CutList Studio</span><span id="footer-message">Seu próximo projeto, bem aproveitado.</span><span>v1.0</span></footer>
+    </section>
+  </main>
+  <dialog id="modal"><div class="modal-header"><h2 id="modal-title"></h2><button id="close-modal" class="icon-button" aria-label="Fechar janela">×</button></div><div id="modal-body"></div></dialog>
+  <input type="file" id="project-file" accept=".json,application/json" hidden><input type="file" id="csv-file" accept=".csv,.tsv,text/csv,text/tab-separated-values" hidden>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div><noscript>Ative o JavaScript para calcular seus planos de corte.</noscript>
+  <script type="module" src="./src/app.js"></script>
+</body></html>
