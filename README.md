@@ -20,6 +20,12 @@ node scripts/serve.js --dist
 
 O build gera `dist/`, pronto para qualquer hospedagem estática. Use um servidor HTTP: abrir `index.html` diretamente como `file://` não permite carregar os módulos e o Web Worker.
 
+## Publicar no GitHub Pages
+
+O workflow `.github/workflows/pages.yml` testa o projeto, gera `dist/` e publica somente os arquivos do aplicativo. Em **Settings → Pages**, selecione **GitHub Actions** como origem. Após habilitar o Pages, execute **Publish GitHub Pages** em **Actions**, ou envie um novo commit à `main`. A publicação será atualizada automaticamente nos próximos envios.
+
+O endereço padrão deste repositório é `https://alexmetaloide.github.io/cutlist-studio/`. Ele só fica disponível após o Pages ser habilitado e o deploy terminar. O plano da conta precisa permitir Pages para a visibilidade escolhida; na configuração atual da conta, repositórios privados não são elegíveis.
+
 ## Recursos
 
 - Tabelas de peças e estoque com dimensões, quantidades, nomes, materiais e ativação por linha.
