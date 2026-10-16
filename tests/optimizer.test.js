@@ -110,7 +110,7 @@ function verify(project, result) {
       }
       equalNumber(p.width, p.rotated ? sourcePanel.width : sourcePanel.length, 'placed width');
       equalNumber(p.height, p.rotated ? sourcePanel.length : sourcePanel.width, 'placed height');
-      if (project.options?.considerMaterials !== false) assert.equal(p.material, sheet.material);
+      if (project.options?.considerMaterials !== false) {assert.equal(p.material, sheet.material);assert.equal(p.finish,sheet.finish);}
       counts.set(p.panelId, (counts.get(p.panelId) || 0) + 1);
     }
     const placedArea = sheet.placements.reduce((sum, p) => sum + rectArea(p), 0);

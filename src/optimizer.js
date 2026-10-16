@@ -98,7 +98,9 @@ function normalize(project) {
         width: dimension(raw.width, `${name}: largura`),
         quantity,
         material: string(raw.material, 'O material'),
+        finish: raw.finish === undefined ? 'twoFaces' : string(raw.finish, 'O acabamento'),
       };
+      if (!['twoFaces', 'raw'].includes(item.finish)) fail('O acabamento deve ser 2 faces ou Cru.');
       const itemArea = area(item);
       totalArea += itemArea * quantity;
       if (!(itemArea > 0) || !Number.isFinite(totalArea)) fail(`${name}: a área excede os limites numéricos.`);
@@ -168,7 +170,7 @@ function usable(stock, trim) {
 }
 
 function sameMaterial(stock, piece, options) {
-  return !options.considerMaterials || stock.material === piece.material;
+  return !options.considerMaterials || (stock.material === piece.material && stock.finish === piece.finish);
 }
 
 function rotatedEdges(edges) {
@@ -207,7 +209,7 @@ function place(sheet, piece, fit, kerf, splitMode) {
   }
   sheet.placements.push({
     id: piece.id, panelId: piece.panelId, x: rect.x, y: rect.y, width, height,
-    label: piece.label, material: piece.material, rotated: fit.rotated,
+    label: piece.label, material: piece.material, finish: piece.finish, rotated: fit.rotated,
     edges: fit.rotated ? rotatedEdges(piece.edges) : { ...piece.edges },
   });
 }
@@ -249,7 +251,7 @@ function run(pieces, stock, options, splitMode, scoreMode, stockMode) {
         remaining[stockIndex]--;
         chosen = {
           id: `sheet-${sheets.length + 1}`, stockId: item.id,
-          length: item.length, width: item.width, material: item.material,
+          length: item.length, width: item.width, material: item.material, finish: item.finish,
           placements: [], freeRects: [usable(item, options.trim)], cuts: [],
         };
         sheets.push(chosen);
@@ -288,7 +290,7 @@ function planScore(plan, priority) {
 
 function reason(piece, stock, options, sheets) {
   const matching = stock.filter(item => sameMaterial(item, piece, options));
-  if (!matching.length) return 'Nenhuma chapa disponível para o material da peça.';
+  if (!matching.length) return 'Nenhuma chapa disponível com o material e acabamento da peça.';
   const fitting = matching.filter(item => {
     const rect = usable(item, options.trim);
     return rect && findFit([rect], piece, options, 'area');

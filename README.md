@@ -28,7 +28,8 @@ O endereço padrão deste repositório é `https://alexmetaloide.github.io/cutli
 
 ## Recursos
 
-- Tabelas de peças e estoque com dimensões, quantidades, nomes, materiais e ativação por linha.
+- Tabelas de peças e estoque com dimensões, quantidade selecionável, nomes e ativação por linha. A lista de quantidades inclui a opção **Outra…** para qualquer inteiro entre 1 e 2.000.
+- Seletores de MDF **6 mm, 9 mm, 15 mm, 18 mm ou 25 mm** e acabamento **2 faces ou Cru**, tanto nas peças quanto nas chapas. As dimensões dos painéis continuam em centímetros; as espessuras usam a identificação comercial em milímetros.
 - Otimização 2D por cortes guilhotinados, executada em Web Worker para manter a interface responsiva.
 - Espessura da serra, refilo, rotação, direção de veio, separação por material e limite de uma chapa.
 - Fitas de borda por lado, indicação visual e soma do comprimento das fitas.
@@ -44,12 +45,12 @@ O endereço padrão deste repositório é `https://alexmetaloide.github.io/cutli
 ## CSV
 
 ```csv
-comprimento;largura;quantidade;nome;material
-72;45;2;Lateral;MDF 1,8 cm
-56,4;42;3;Prateleira;MDF 1,8 cm
+comprimento;largura;quantidade;nome;material;acabamento
+72;45;2;Lateral;MDF 18 mm;2 faces
+56,4;42;3;Prateleira;MDF 18 mm;Cru
 ```
 
-Aceita ponto e vírgula, vírgula e tabulação; cabeçalhos em português ou inglês; decimais com vírgula quando o separador for ponto e vírgula; campos entre aspas. As dimensões do CSV são interpretadas em centímetros. As linhas importadas são adicionadas à lista. O nome é ignorado para estoque. Quantidades devem ser inteiros positivos.
+Aceita ponto e vírgula, vírgula e tabulação; cabeçalhos em português ou inglês; decimais com vírgula quando o separador for ponto e vírgula; campos entre aspas. As dimensões do CSV são interpretadas em centímetros. As linhas importadas são adicionadas à lista. O nome é ignorado para estoque. Quantidades devem ser inteiros positivos. A coluna `acabamento` aceita `2 faces` ou `Cru`; arquivos antigos sem essa coluna assumem `2 faces`. Materiais antigos como `MDF 1,8 cm` são reconhecidos como `MDF 18 mm`. Outros nomes importados são preservados na lista.
 
 ## Como funciona o motor
 
@@ -57,7 +58,7 @@ Aceita ponto e vírgula, vírgula e tabulação; cabeçalhos em português ou in
 
 Cada corte atravessa um retângulo disponível inteiro, produzindo subdivisões que podem ser cortadas na sequência indicada. A espessura da serra é consumida à direita de cortes verticais e abaixo de cortes horizontais. Não é adicionada uma espessura desnecessária quando uma peça ocupa exatamente uma dimensão da região. O refilo reserva uma margem em cada lado; **os cortes de refilo devem ser realizados antes e não entram na sequência nem nas estatísticas de corte**.
 
-O aproveitamento considera a área total das chapas abertas. A área não utilizada inclui sobras, refilo e material removido pela serra. Materiais são comparados pelo texto exato. A opção de veio bloqueia a rotação em 90°; cadastre comprimento e largura de acordo com o veio desejado. Fitas de borda são informativas, sem desconto nas dimensões. Limite de 2.000 peças e 2.000 chapas expandidas; 2 MB por arquivo importado.
+O aproveitamento considera a área total das chapas abertas. A área não utilizada inclui sobras, refilo e material removido pela serra. Com a opção de materiais ativada, o cálculo exige a mesma espessura/material e o mesmo acabamento na peça e na chapa. Desativá-la ignora ambos. A opção de veio bloqueia a rotação em 90°; cadastre comprimento e largura de acordo com o veio desejado. Fitas de borda são informativas, sem desconto nas dimensões. Limite de 2.000 peças e 2.000 chapas expandidas; 2 MB por arquivo importado.
 
 ## Dados e limites de equivalência
 

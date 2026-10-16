@@ -5,7 +5,7 @@
   <meta name="theme-color" content="#273438">
   <meta name="description" content="Otimize o corte de MDF, madeira, vidro e outras chapas. Planeje peças, aproveite materiais e exporte seus planos de corte.">
   <title>CutList Studio — Plano de corte</title>
-  <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./src/style.css">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./src/style.css?v=mdf-1">
 </head>
 <body>
   <header class="topbar">
@@ -23,7 +23,7 @@
         <label class="option-line">Refilo nas bordas <div class="number-unit"><input type="number" id="trim" min="0" step="any" value="0" aria-label="Refilo nas bordas"><span class="unit-text">cm</span></div></label>
         <label class="option-line">Nomes nos painéis <input class="switch" type="checkbox" id="showLabels" checked></label>
         <label class="option-line">Permitir rotação das peças <input class="switch" type="checkbox" id="allowRotation" checked></label>
-        <label class="option-line">Considerar materiais <input class="switch" type="checkbox" id="considerMaterials" checked></label>
+        <label class="option-line">Considerar materiais e acabamento <input class="switch" type="checkbox" id="considerMaterials" checked></label>
         <label class="option-line">Respeitar direção do veio <input class="switch" type="checkbox" id="grain"></label>
         <label class="option-line">Usar somente uma chapa <input class="switch" type="checkbox" id="oneSheet"></label>
         <label class="option-line">Fitas de borda <input class="switch" type="checkbox" id="edgeBanding"></label>
@@ -43,5 +43,5 @@
   <dialog id="modal"><div class="modal-header"><h2 id="modal-title"></h2><button id="close-modal" class="icon-button" aria-label="Fechar janela">×</button></div><div id="modal-body"></div></dialog>
   <input type="file" id="project-file" accept=".json,application/json" hidden><input type="file" id="csv-file" accept=".csv,.tsv,text/csv,text/tab-separated-values" hidden>
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div><noscript>Ative o JavaScript para calcular seus planos de corte.</noscript>
-  <script type="module" src="./src/app.js?v=centimeters-1"></script>
+  <script type="module" src="./src/app.js?v=mdf-1"></script>
 </body></html>
