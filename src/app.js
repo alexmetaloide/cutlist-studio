@@ -1,4 +1,4 @@
-import {defaults,example,normalizeProject,parseCSV,exportCSV,uid} from './io.js';
+import {defaults,example,normalizeProject,parseCSV,exportCSV,uid} from './io.js?v=centimeters-1';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=(n,d=1)=>new Intl.NumberFormat('pt-BR',{maximumFractionDigits:d}).format(n);
